@@ -137,9 +137,11 @@ app.post("/api/addorganizer", async (req, res) => {
   try {
     await Organizer.create({
       name: req.body.name,
-      abbrev: req.body.abbrev,
       founder: req.body.founder,
-      location: req.body.location,
+      email: req.body.email,
+      country: req.body.country,
+      city: req.body.city,
+      address: req.body.address,
     });
     res.json({ status: "ok" });
   } catch (err) {
@@ -148,6 +150,15 @@ app.post("/api/addorganizer", async (req, res) => {
       status: "error",
       error: "An error occured while adding the organizer",
     });
+  }
+});
+
+app.get("/api/organizers", async (req, res) => {
+  try {
+    const organizers = await Organizer.find({});
+    res.send(organizers);
+  } catch (err) {
+    res.send(err);
   }
 });
 
