@@ -8,6 +8,7 @@ const OrganizerSchema = mongoose.Schema(
     country: { type: String, required: true },
     city: { type: String, required: true },
     address: { type: String, required: false },
+    logo: { type: String, required: true },
   },
   { collection: "Organizers" }
 );

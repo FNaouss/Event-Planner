@@ -6,6 +6,8 @@ const cors = require("cors");
 const User = require("./Models/user.model.js");
 const Event = require("./Models/event.model");
 const Organizer = require("./Models/organizer.model");
+const multer = require("multer");
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -14,6 +16,15 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "../Client/public/uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 // Connection to Database
 
 mongoose.connect(
@@ -63,7 +74,7 @@ app.post("/api/login", async (req, res) => {
 
 // Add Event
 
-app.post("/api/addevent", async (req, res) => {
+app.post("/api/addevent", upload.single("logo"), async (req, res) => {
   console.log(req.body);
   try {
     await Event.create({
@@ -132,8 +143,7 @@ app.get("/api/event/:_id", async (req, res) => {
   res.send(ev);
 });
 
-app.post("/api/addorganizer", async (req, res) => {
-  console.log(req.body);
+app.post("/api/addorganizer", upload.single("logo"), async (req, res) => {
   try {
     await Organizer.create({
       name: req.body.name,
@@ -142,6 +152,7 @@ app.post("/api/addorganizer", async (req, res) => {
       country: req.body.country,
       city: req.body.city,
       address: req.body.address,
+      logo: req.file.originalname,
     });
     res.json({ status: "ok" });
   } catch (err) {
@@ -154,6 +165,7 @@ app.post("/api/addorganizer", async (req, res) => {
 });
 
 app.get("/api/organizers", async (req, res) => {
+  console.log(res.body);
   try {
     const organizers = await Organizer.find({});
     res.send(organizers);

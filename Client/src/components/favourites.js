@@ -48,6 +48,14 @@ function Favourite() {
           eventColor="teal"
           eventDisplay="block"
           displayEventEnd="true"
+          eventDataTransform={function (eventData) {
+            return {
+              id: eventData._id,
+              title: eventData.eventName,
+              start: eventData.start,
+              end: eventData.end,
+            };
+          }}
         />
       </div>
       <div>
