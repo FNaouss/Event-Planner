@@ -191,7 +191,7 @@ function Organizers() {
               {organizers.map((organizer) => (
                 <tr className="bg-white">
                   <td className="p-3 text-sm font-bold text-blue-500 hover:underline">
-                    <img src={"../../public/uploads/" + organizer.logo} />
+                    <img src={"../../src/images/logo.png"} />
                   </td>
                   <td className="p-3 text-sm font-bold text-blue-500 hover:underline">
                     {organizer.name}

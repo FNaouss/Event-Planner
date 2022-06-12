@@ -7,7 +7,7 @@ const Nav = () => {
     { name: "Calendar", link: "./calendar" },
     { name: "Events Organizers", link: "./organizers" },
     { name: "Favourite Events", link: "./favourites" },
-    { name: "Log In", link: "./login" },
+    { name: "Log Out", link: "./logout" },
   ];
   return (
     <div className="shadow-md w-full relative top-0 left-0">

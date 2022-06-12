@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import swal from "sweetalert";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -29,10 +30,15 @@ function Login() {
     const data = await response.json();
 
     if (data.user) {
-      localStorage.setItem("token", data.user);
-      window.location.href = "/Calendar";
+      window.location.href = "./calendar";
     } else {
-      alert("Please check your username and password");
+      swal({
+        title: "Error",
+        icon: "error",
+        text: "Please check your username and password",
+        button: "Try Again",
+        dangerMode: "true",
+      });
     }
   }
   return (

@@ -8,6 +8,10 @@ const Event = require("./Models/event.model");
 const Organizer = require("./Models/organizer.model");
 const multer = require("multer");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const asyncHandler = require("express-async-handler");
+
 require("dotenv").config();
 
 const app = express();
@@ -18,7 +22,7 @@ app.use(express.json());
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../Client/public/uploads/");
+    cb(null, "../Client/src/uploads/");
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -38,43 +42,95 @@ mongoose.connect(
 
 // Sign up Backend
 
-app.post("/api/register", async (req, res) => {
-  console.log(req.body);
-  try {
-    await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
+app.post(
+  "/api/register",
+  asyncHandler(async (req, res) => {
+    console.log(req.body);
+    const { name, email, password } = req.body;
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      throw new Error("Email existing");
+    }
+
+    const salt = await bcrypt.genSalt();
+    const hashedPW = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPW,
     });
-    // Could use req.body instead of these 3 lines
-    res.json({ status: "ok" });
-  } catch (err) {
-    console.log(err);
-    res.json({ status: "error", error: "Email already existing" });
+
+    if (user) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user._id),
+      });
+    } else {
+      throw new Error("Couldn't add the user");
+    }
+  })
+);
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
+};
+const protect = asyncHandler(async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      req.user = await User.findById(decoded.id).select("-password");
+      next();
+    } catch (err) {
+      res.status(401);
+      console.log(err);
+      throw new Error("Invalid Token");
+    }
+  }
+  if (!token) {
+    throw new Error("No token");
+    res.status(401);
   }
 });
 
 // Login Backend
 
-app.post("/api/login", async (req, res) => {
-  console.log(req.body);
-  const user = await User.findOne({
-    email: req.body.email,
-    password: req.body.password,
-  });
+app.post(
+  "/api/login",
+  asyncHandler(async (req, res) => {
+    console.log(req.body);
+    const user = await User.findOne({
+      email: req.body.email,
+      password: req.body.password,
+    });
 
-  if (user) {
-    return res.json({ status: "ok", user: true });
-  } else {
-    res.json({ status: "error", user: false });
-  }
-});
+    if (user) {
+      const token = jwt.sign({ email: user.email }, "secret");
+      return res.json({
+        status: "ok",
+        user: token,
+      });
+    } else {
+      res.json({ status: "error", user: false });
+    }
+  })
+);
 
 // EVENTS CRUD----------------------------------------------
 
 // Add Event
 
-app.post("/api/addevent", upload.single("logo"), async (req, res) => {
+app.post("/api/addevent", protect, async (req, res) => {
   console.log(req.body);
   try {
     await Event.create({
@@ -122,6 +178,8 @@ app.get("/api/events", async (req, res) => {
   }
 });
 
+// Display Favourite Events
+
 app.get("/api/favevents", async (req, res) => {
   try {
     const events = await Event.find({ favourite: true });
@@ -165,7 +223,6 @@ app.post("/api/addorganizer", upload.single("logo"), async (req, res) => {
 });
 
 app.get("/api/organizers", async (req, res) => {
-  console.log(res.body);
   try {
     const organizers = await Organizer.find({});
     res.send(organizers);

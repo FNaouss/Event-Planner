@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import swal from "sweetalert";
 
 function Signup() {
   const [name, setName] = useState("");
@@ -18,23 +19,28 @@ function Signup() {
   };
   async function handleSubButton(e) {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    });
-    const data = await response.json();
-    if (data) {
-      window.location.href = "./login";
+    try {
+      const response = await fetch("http://localhost:5000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+      const data = await response.json();
+      if (data) {
+        window.location.href = "./login";
+      }
+      console.log(data);
+    } catch (err) {
+      console.log(err);
     }
-    console.log(data);
   }
+
   return (
     <div className="bg-slate-900 h-screen text-slate-800">
       <br />
