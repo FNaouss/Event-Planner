@@ -13,6 +13,13 @@ function AdminCalendar() {
     minute: "2-digit",
     meridiem: "short",
   };
+  const deleteButton = {
+    text: "Delete",
+    value: "delete",
+    visible: true,
+    confirm: true,
+    closeModal: true,
+  };
 
   const onSubClear = () => {
     Axios.delete("http://localhost:5000/api/delete-all");
@@ -60,6 +67,7 @@ function AdminCalendar() {
         >
           Reset Calendar
         </button>
+        {/*}
         <div className="flex">
           <label className="w-32 ">Favourite events</label>
           <input
@@ -72,7 +80,7 @@ function AdminCalendar() {
             }}
             checked={!selectedFav}
           />
-        </div>
+          </div>{*/}
       </div>
       <div className="relative z-0 mr-7 ml-7">
         <FullCalendar
@@ -96,7 +104,7 @@ function AdminCalendar() {
           }}
           eventClick={(info) => {
             swal({
-              title: "Are you sure ?",
+              title: "Event info",
               text:
                 "The event you clicked is " +
                 info.event.title +
@@ -104,19 +112,35 @@ function AdminCalendar() {
                 info.event.start +
                 " and ending on " +
                 info.event.end,
-              icon: "warning",
-              buttons: true,
-              dangerMode: true,
-            }).then((willDelete) => {
-              if (willDelete) {
-                swal("Poof! Your event has been deleted!", {
-                  icon: "success",
-                });
-                Axios.delete(
-                  `http://localhost:5000/api/deleteevent/${info.event.id}`
-                );
-              } else {
-                swal("Your event is safe!");
+              icon: "info",
+              buttons: {
+                cancel: true,
+                deleteButton,
+              },
+              timer: 10000,
+            }).then((value) => {
+              switch (value) {
+                case "delete":
+                  swal({
+                    title: "Are you sure ?",
+                    icon: "warning",
+                    dangerMode: true,
+                    buttons: true,
+                  }).then((willDelete) => {
+                    if (willDelete) {
+                      Axios.delete(
+                        `http://localhost:5000/api/deleteevent/${info.event.id}`
+                      );
+                      swal("Poof! Your event has been deleted!", {
+                        icon: "success",
+                      });
+                    } else {
+                      swal("Your event is safe!");
+                    }
+                  });
+                  break;
+                default:
+                  swal("Your event is safe!");
               }
             });
           }}

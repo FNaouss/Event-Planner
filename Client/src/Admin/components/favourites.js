@@ -16,6 +16,13 @@ function AdminFavourite() {
     minute: "2-digit",
     meridiem: "short",
   };
+  const deleteButton = {
+    text: "Delete",
+    value: "delete",
+    visible: true,
+    confirm: true,
+    closeModal: true,
+  };
   useEffect(() => {
     Axios.get("http://localhost:5000/api/favevents")
       .then((response) => {
@@ -66,7 +73,7 @@ function AdminFavourite() {
           }}
           eventClick={(info) => {
             swal({
-              title: "Are you sure ?",
+              title: "Event info",
               text:
                 "The event you clicked is " +
                 info.event.title +
@@ -74,19 +81,35 @@ function AdminFavourite() {
                 info.event.start +
                 " and ending on " +
                 info.event.end,
-              icon: "warning",
-              buttons: true,
-              dangerMode: true,
-            }).then((willDelete) => {
-              if (willDelete) {
-                swal("Poof! Your event has been deleted!", {
-                  icon: "success",
-                });
-                Axios.delete(
-                  `http://localhost:5000/api/deleteevent/${info.event.id}`
-                );
-              } else {
-                swal("Your event is safe!");
+              icon: "info",
+              buttons: {
+                cancel: true,
+                deleteButton,
+              },
+              timer: 10000,
+            }).then((value) => {
+              switch (value) {
+                case "delete":
+                  swal({
+                    title: "Are you sure ?",
+                    icon: "warning",
+                    dangerMode: true,
+                    buttons: true,
+                  }).then((willDelete) => {
+                    if (willDelete) {
+                      Axios.delete(
+                        `http://localhost:5000/api/deleteevent/${info.event.id}`
+                      );
+                      swal("Poof! Your event has been deleted!", {
+                        icon: "success",
+                      });
+                    } else {
+                      swal("Your event is safe!");
+                    }
+                  });
+                  break;
+                default:
+                  swal("Your event is safe!");
               }
             });
           }}
