@@ -36,6 +36,11 @@ function AdminFavourite() {
   return (
     <section>
       <div>
+        <header className="bg-white shadow">
+          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-bold text-gray-900">Liked Events</h1>
+          </div>
+        </header>
         <br />
         <p className="text-center text-sm">
           ⓘ For events within the same day, the calendar puts earlier events

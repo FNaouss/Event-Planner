@@ -26,7 +26,6 @@ function AdminCalendar() {
   };
 
   const [events, setEvents] = useState([]);
-  const [selectedFav, setSelectedFav] = useState(false);
 
   useEffect(() => {
     Axios.get("http://localhost:5000/api/events")
@@ -45,6 +44,13 @@ function AdminCalendar() {
   return (
     <section>
       <div>
+        <header className="bg-white shadow">
+          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-bold text-gray-900">
+              Upcoming Events
+            </h1>
+          </div>
+        </header>
         <br />
         <p className="text-center text-sm">
           ⓘ For events within the same day, the calendar puts earlier events

@@ -1,11 +1,6 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  TrashIcon,
-  PencilAltIcon,
-  PhotographIcon,
-} from "@heroicons/react/outline";
+import { TrashIcon, PencilAltIcon } from "@heroicons/react/outline";
 import swal from "sweetalert";
 
 function AdminOrganizers() {
@@ -242,7 +237,10 @@ function AdminOrganizers() {
               {organizers.map((organizer) => (
                 <tr className="bg-white" key={organizer._id}>
                   <td className="p-3 text-sm font-bold text-blue-500 hover:underline">
-                    <img src="../../images/logo.png" />
+                    <img
+                      src={`../../../public/${organizer.logo}`}
+                      alt={organizer.name + "'s logo"}
+                    />
                   </td>
                   <td className="p-3 text-sm font-bold text-blue-500 hover:underline">
                     {organizer.name}

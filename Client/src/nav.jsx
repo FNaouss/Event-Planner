@@ -4,7 +4,7 @@ import LogoSS from "./logo";
 const Nav = () => {
   let Links = [
     { name: "Home", link: "/" },
-    { name: "Calendar", link: "./calendar" },
+    { name: "Events", link: "./calendar" },
     { name: "Events Organizers", link: "./organizers" },
     { name: "Favourite Events", link: "./favourites" },
     { name: "Log Out", link: "./logout" },
