@@ -117,7 +117,6 @@ function AdminOrganizers() {
                             onChange={(e) => {
                               setFileName(e.target.files[0]);
                             }}
-                            required
                             className="mt-1 mx-3 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           />
                         </div>
@@ -157,6 +156,7 @@ function AdminOrganizers() {
                         <input
                           type="text"
                           name="email"
+                          required
                           onChange={(e) => {
                             setEmail(e.target.value);
                           }}
@@ -171,6 +171,7 @@ function AdminOrganizers() {
                         <input
                           name="country"
                           type="text"
+                          required
                           onChange={(e) => {
                             setCountry(e.target.value);
                           }}
@@ -238,8 +239,9 @@ function AdminOrganizers() {
                 <tr className="bg-white" key={organizer._id}>
                   <td className="p-3 text-sm font-bold text-blue-500 hover:underline">
                     <img
-                      src={`../../../public/${organizer.logo}`}
+                      src={`${organizer.logo}`}
                       alt={organizer.name + "'s logo"}
+                      className="w-20"
                     />
                   </td>
                   <td className="p-3 text-sm font-bold text-blue-500 hover:underline">
@@ -260,13 +262,26 @@ function AdminOrganizers() {
                   <td className="p-3 text-sm text-gray-700">
                     {organizer.address}
                   </td>
-                  <td className="flex p-3">
+                  <td className="flex p-3 m-auto ">
                     <a
-                      href="#"
                       onClick={() => {
-                        Axios.delete(
-                          `http://localhost:5000/api/deleteorganizer/${organizer._id}`
-                        );
+                        swal({
+                          title: "Are you sure ?",
+                          icon: "warning",
+                          dangerMode: true,
+                          buttons: true,
+                        }).then((willDelete) => {
+                          if (willDelete) {
+                            Axios.delete(
+                              `http://localhost:5000/api/deleteorganizer/${organizer._id}`
+                            );
+                            swal("Poof! Your event has been deleted!", {
+                              icon: "success",
+                            });
+                          } else {
+                            swal("Your event is safe!");
+                          }
+                        });
                       }}
                     >
                       <TrashIcon className="w-6" />
