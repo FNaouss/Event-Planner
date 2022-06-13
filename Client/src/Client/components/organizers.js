@@ -178,6 +178,7 @@ function Organizers() {
           <table className="mx-auto">
             <thead className="bg-gray-50 border-b-2 border-gray-200">
               <tr>
+                <th className="p-3 text-sm font-bold tracking-wide">Logo</th>
                 <th className="p-3 text-sm font-bold tracking-wide">Name</th>
                 <th className="p-3 text-sm font-bold tracking-wide">Founder</th>
                 <th className="p-3 text-sm font-bold tracking-wide">Email</th>

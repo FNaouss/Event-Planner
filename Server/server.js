@@ -11,6 +11,7 @@ const path = require("path");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
+const { rmSync } = require("fs");
 
 require("dotenv").config();
 
@@ -73,6 +74,7 @@ app.post(
     }
   })
 );
+/*
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "1d",
@@ -102,7 +104,7 @@ const protect = asyncHandler(async (req, res, next) => {
     res.status(401);
   }
 });
-
+*/
 // Login Backend
 
 app.post(
@@ -130,7 +132,7 @@ app.post(
 
 // Add Event
 
-app.post("/api/addevent", protect, async (req, res) => {
+app.post("/api/addevent", async (req, res) => {
   console.log(req.body);
   try {
     await Event.create({
@@ -189,7 +191,7 @@ app.get("/api/favevents", async (req, res) => {
   }
 });
 
-app.delete("/api/delete/:_id", async (req, res) => {
+app.delete("/api/deleteevent/:id", async (req, res) => {
   const id = req.params.id;
   await Event.findByIdAndDelete(id).exec();
   res.send("Event deleted");
@@ -229,6 +231,28 @@ app.get("/api/organizers", async (req, res) => {
   } catch (err) {
     res.send(err);
   }
+});
+
+app.delete(`/api/deleteorganizer/:id`, async (req, res) => {
+  const id = req.params.id;
+  await Organizer.findByIdAndRemove(id).exec();
+  res.send("Organizer Deleted");
+});
+
+app.get("/api/organizer/:id", async (req, res) => {});
+
+app.put("/api/editorganizer/:id", async (req, res) => {
+  const id = req.body.id;
+  const organizerToUpdate = await Organizer.findById(id);
+  organizerToUpdate.name = req.body.newName;
+  organizerToUpdate.founder = req.body.newFounder;
+  organizerToUpdate.email = req.body.newEmail;
+  organizerToUpdate.country = req.body.newCountry;
+  organizerToUpdate.city = req.body.newCity;
+  organizerToUpdate.address = req.body.newAddress;
+
+  organizerToUpdate.save();
+  res.send("organizer updated");
 });
 
 app.listen(5000, () => console.log("Server started"));

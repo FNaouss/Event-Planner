@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginIcon } from "@heroicons/react/outline";
 import swal from "sweetalert";
+import LogoSS from "./logo";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -29,8 +32,8 @@ function Login() {
 
     const data = await response.json();
 
-    if (data.user) {
-      window.location.href = "./calendar";
+    if (data) {
+      navigate("/Calendar");
     } else {
       swal({
         title: "Error",
@@ -45,12 +48,16 @@ function Login() {
     <div className="bg-slate-900 h-screen text-slate-800">
       <br />
       <br />
-      <div className="rounded-xl bg-slate-50 w-full max-w-sm mx-auto">
-        <h1 className="mt-20 pt-5 text-center text-3xl font-serif ">Log In</h1>
+      <div className="rounded-xl bg-slate-50 w-full max-w-sm mx-auto space-y-8">
+        <div className="pt-2">
+          <h2 className="mt-2 text-center text-2xl font-extrabold text-slate-700">
+            Sign in to your account
+          </h2>
+        </div>
         <form
           method="POST"
           action="./Calendar"
-          className="shadow-md px-8 pt-6 pb-8 mb-4"
+          className="shadow-md px-8 pt-2 pb-8 mb-4"
           onSubmit={handleSubButton}
         >
           <div className="mb-5">

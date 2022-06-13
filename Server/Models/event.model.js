@@ -8,7 +8,6 @@ const EventSchema = mongoose.Schema(
     location: { type: String },
     organizer: { type: String },
     favourite: { type: Boolean },
-    user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
   },
   { collection: "Events" }
 );

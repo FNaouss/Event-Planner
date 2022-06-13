@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import swal from "sweetalert";
 
 function Signup() {
   const [name, setName] = useState("");
@@ -45,9 +44,9 @@ function Signup() {
     <div className="bg-slate-900 h-screen text-slate-800">
       <br />
       <br />
-      <div className="rounded-xl bg-slate-50 w-full max-w-sm mx-auto">
+      <div className="rounded-xl bg-slate-50 w-full max-w-sm mx-auto mt-4">
         <br />
-        <h1 className="mt-8 text-center text-3xl font-serif">Sign up</h1>
+        <h1 className="mt-4 text-center text-3xl font-serif">Sign up</h1>
         <form
           action="/"
           method="POST"

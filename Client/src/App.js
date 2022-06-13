@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Nav from "./components/nav";
-import Login from "./components/login";
-import Home from "./components/Home";
-import Calendar from "./components/Calendar";
+import Nav from "./nav";
+import Login from "./login";
+import Home from "./Home";
 import Modal from "react-modal";
-import Signup from "./components/signup";
-import Favourite from "./components/favourites";
-import Organizers from "./components/organizers";
+import Signup from "./signup";
+import AdminCalendar from "./Admin/components/Calendar";
+import AdminFavourite from "./Admin/components/favourites";
+import AdminOrganizers from "./Admin/components/organizers";
 
 Modal.setAppElement("#root");
 function App() {
@@ -17,9 +17,9 @@ function App() {
         <Nav />
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/Calendar" element={<Calendar />}></Route>
-          <Route exact path="/organizers" element={<Organizers />}></Route>
-          <Route exact path="/favourites" element={<Favourite />}></Route>
+          <Route path="/calendar" element={<AdminCalendar />}></Route>
+          <Route path="/favourites" element={<AdminFavourite />}></Route>
+          <Route path="/Organizers" element={<AdminOrganizers />}></Route>
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/signup" element={<Signup />}></Route>
         </Routes>
