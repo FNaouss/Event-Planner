@@ -87,6 +87,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
   - [x] Sign up and Sign in
   - [ ] Pass token
   - [ ] Identify logged in user (whether it's admin or client)
+- [ ] Contact the admin via a whatsapp form using WHATSAPP CLOUD API
 
 ## License
 
