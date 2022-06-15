@@ -80,7 +80,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 - [x] Build Admin Interface
   - [x] Add events CRUD
   - [x] Add organizers CRUD
-  - [ ] Assign roles
+  - [x] Assign roles
 - [ ] Build Client Interface
 - [x] Implement "Favourite/Liked events" (test on Admin Interface)
 - [ ] Apply sessions
